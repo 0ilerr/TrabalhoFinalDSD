@@ -23,19 +23,26 @@ import java.util.concurrent.Semaphore;
  */
 public class ServidorBar implements InterfaceRemota, Serializable {
 
-    public static Estoque estoque = Estoque.getInstance();
-    public static ArrayList<Bebida> cardapio = new ArrayList<>();
-    private List<Garcom> garcons = new ArrayList<>();
-    private List<Garcom> garconsDisponiveis = new ArrayList<>();
-    private List<Bartender> bartenders = new ArrayList<Bartender>();
-    private List<Bartender> bartendersDisponiveis = new ArrayList<Bartender>();
-    private List<Cliente> clientes = new ArrayList<Cliente>();
+    public static ArrayList<Bebida> cardapio;
+    private List<Garcom> garcons;
+    private List<Garcom> garconsDisponiveis;
+    private List<Bartender> bartenders;
+    private List<Bartender> bartendersDisponiveis;
+    private List<Cliente> clientes;
+    private Estoque estoque;
     private Semaphore garconsSemaphore;
     private Semaphore bartenderSemaphore;
     private int garconsPermitidos;
 
     public ServidorBar() throws RemoteException {
         super();
+        this.cardapio = new ArrayList<>();
+        this.garcons = new ArrayList<>();
+        this.garconsDisponiveis = new ArrayList<>();
+        this.bartenders = new ArrayList<Bartender>();
+        this.bartendersDisponiveis = new ArrayList<Bartender>();
+        this.clientes = new ArrayList<Cliente>();
+        this.estoque = Estoque.getInstance();
     }
 
     public void setGarconsSemaphore(Semaphore garconsSemaphore) throws RemoteException {
@@ -114,16 +121,16 @@ public class ServidorBar implements InterfaceRemota, Serializable {
         System.out.println("Garcons Size " + garcons.size());
     }
 
-    public void iniciaCardapio() {
-        IngredienteBebida coca1 = new IngredienteBebida(1, estoque.getIngredienteById(0), 1);
-        IngredienteBebida gelo1 = new IngredienteBebida(2, estoque.getIngredienteById(1), 1);
-        IngredienteBebida vodka1 = new IngredienteBebida(3, estoque.getIngredienteById(2), 1);
-        IngredienteBebida coca2 = new IngredienteBebida(4, estoque.getIngredienteById(0), 2);
-        IngredienteBebida gelo2 = new IngredienteBebida(5, estoque.getIngredienteById(1), 2);
-        IngredienteBebida vodka2 = new IngredienteBebida(6, estoque.getIngredienteById(2), 2);
-        IngredienteBebida coca3 = new IngredienteBebida(7, estoque.getIngredienteById(0), 3);
-        IngredienteBebida gelo3 = new IngredienteBebida(8, estoque.getIngredienteById(1), 3);
-        IngredienteBebida vodka3 = new IngredienteBebida(9, estoque.getIngredienteById(2), 3);
+    public void iniciaCardapio() throws RemoteException {
+        IngredienteBebida coca1 = new IngredienteBebida(1, getEstoqueInstance().getIngredienteById(0), 1);
+        IngredienteBebida gelo1 = new IngredienteBebida(2, getEstoqueInstance().getIngredienteById(1), 1);
+        IngredienteBebida vodka1 = new IngredienteBebida(3, getEstoqueInstance().getIngredienteById(2), 1);
+        IngredienteBebida coca2 = new IngredienteBebida(4, getEstoqueInstance().getIngredienteById(0), 2);
+        IngredienteBebida gelo2 = new IngredienteBebida(5, getEstoqueInstance().getIngredienteById(1), 2);
+        IngredienteBebida vodka2 = new IngredienteBebida(6, getEstoqueInstance().getIngredienteById(2), 2);
+        IngredienteBebida coca3 = new IngredienteBebida(7, getEstoqueInstance().getIngredienteById(0), 3);
+        IngredienteBebida gelo3 = new IngredienteBebida(8, getEstoqueInstance().getIngredienteById(1), 3);
+        IngredienteBebida vodka3 = new IngredienteBebida(9, getEstoqueInstance().getIngredienteById(2), 3);
 
         Bebida cuba231 = new Bebida(0, "Cuba 2/3/1", 10);
         cuba231.addIngrediente(coca2);
@@ -151,11 +158,6 @@ public class ServidorBar implements InterfaceRemota, Serializable {
     @Override
     public ArrayList<Bebida> getCardapio() throws RemoteException {
         return cardapio;
-    }
-
-    @Override
-    public Estoque getEstoque() throws RemoteException {
-        return estoque;
     }
 
     @Override
@@ -243,12 +245,27 @@ public class ServidorBar implements InterfaceRemota, Serializable {
 
     @Override
     public int getIngrediente(int id) throws RemoteException {
-        for (int i = 0; i < estoque.getIngredientes().size(); i++) {
-            if (estoque.getIngredientes().get(i).getId() == id) {
+        for (int i = 0; i < getEstoqueInstance().getIngredientes().size(); i++) {
+            if (getEstoqueInstance().getIngredientes().get(i).getId() == id) {
                 return i;
             }
         }
         return -1;
     }
 
+    @Override
+    public Estoque getEstoqueInstance() throws RemoteException {
+        return estoque;
+    }
+
+    @Override
+    public void reduzQtdeEstoqueIngrediente(int iPosicaoIngrediente, int qntde, int iQtdeIngrediente) throws RemoteException {
+        this.estoque.getIngredientes().get(iPosicaoIngrediente).reduzQtde(qntde * iQtdeIngrediente);
+    }
+
+    @Override
+    public int getQntdeTotalIngrediente(int iPosicaoIngrediente) throws RemoteException {
+        return this.estoque.getIngredientes().get(iPosicaoIngrediente).getQtdeTotal();
+    }
+    
 }

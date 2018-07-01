@@ -16,13 +16,14 @@ public class Bebida implements Serializable{
 
     private int id;
     private String nome;
-    private ArrayList<IngredienteBebida> ingredientes = new ArrayList<>();
+    private ArrayList<IngredienteBebida> ingredientes;
     private double valor;
 
     public Bebida(int id, String nome, double valor) {
         this.id = id;
         this.nome = nome;
         this.valor = valor;
+        this.ingredientes = new ArrayList<>();
     }
 
     public Bebida() {

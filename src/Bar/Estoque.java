@@ -14,7 +14,11 @@ import java.util.ArrayList;
  */
 public class Estoque implements Serializable {
 
-    private static Estoque instance = new Estoque();
+    private static Estoque instance;
+
+    public static Object getEstoqueInstance() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     private ArrayList<Ingrediente> ingredientes;
 
     public static synchronized Estoque getInstance() {
@@ -26,9 +30,9 @@ public class Estoque implements Serializable {
     }
 
     private Estoque() {
-        Ingrediente i2 = new Ingrediente(1, 10, "Gelo");
-        Ingrediente i3 = new Ingrediente(2, 10, "Vodka");
-        Ingrediente i4 = new Ingrediente(3, 10, "Limão");
+        Ingrediente i2 = new Ingrediente(1, 30, "Gelo");
+        Ingrediente i3 = new Ingrediente(2, 30, "Vodka");
+        Ingrediente i4 = new Ingrediente(3, 30, "Limão");
         ingredientes = new ArrayList<>();
         ingredientes.add(i2);
         ingredientes.add(i3);

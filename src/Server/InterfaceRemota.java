@@ -9,7 +9,6 @@ import Bar.Bartender;
 import Bar.Bebida;
 import Bar.Estoque;
 import Bar.Garcom;
-import Bar.Ingrediente;
 import Cliente.Cliente;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
@@ -46,9 +45,13 @@ public interface InterfaceRemota extends Remote {
 
     ArrayList<Bebida> getCardapio() throws RemoteException;
 
-    Estoque getEstoque() throws RemoteException;
-
     Garcom getGarcomDisponivel() throws RemoteException;
+
+    void reduzQtdeEstoqueIngrediente(int iPosicaoIngrediente, int qntde, int iQtdeIngrediente) throws RemoteException;
+    
+    int getQntdeTotalIngrediente(int iPosicaoIngrediente) throws RemoteException; 
+    
+    Estoque getEstoqueInstance() throws RemoteException;
 
     public void acquireGarcon() throws RemoteException;
 

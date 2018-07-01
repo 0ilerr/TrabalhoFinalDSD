@@ -14,7 +14,6 @@ public class Bartender implements Serializable {
     private String nome;
     private InterfaceRemota interfaceRemota;
     private int clientePedido;
-    private Estoque estoque = Estoque.getInstance();
     private Garcom garcom;
     private boolean ingredientes;
 
@@ -51,33 +50,37 @@ public class Bartender implements Serializable {
         this.nome = nome;
     }
 
-    public boolean verificarIngredientes(Bebida bebida) {
+    public boolean verificarIngredientes(Bebida bebida, int qtde) throws RemoteException {
+        boolean bRetorno = true;
+        for (IngredienteBebida ingredientesBebida : bebida.getIngredientesBebidas()) {
+            int iPosicaoIngrediente = interfaceRemota.getIngrediente(ingredientesBebida.getIngrediente().getId());
+            if (interfaceRemota.getQntdeTotalIngrediente(iPosicaoIngrediente) < (ingredientesBebida.getQtde() * qtde)) {
+                bRetorno = false;
+            }
+        }
 
-        return true;
+        return bRetorno;
     }
 
     public void preparaBebida(Bebida b, int qtde) throws RemoteException, InterruptedException {
         Thread.sleep(1000);
         synchronized (this) {
-            if (verificarIngredientes(b)) {
+            if (verificarIngredientes(b, qtde)) {
                 for (int i = 0; i < b.getIngredientesBebidas().size(); i++) {
-                    System.out.println(estoque.getIngredientes().get(i).getNome()
-                            + " - " + estoque.getIngredientes().get(i).getQtdeTotal());
-                    
-                    estoque.getIngredientes().get(interfaceRemota.getIngrediente(b.getIngredientesBebidas().get(i).getIngrediente().getId()))
-                            .reduzQtde(b.getIngredientesBebidas().get(i).getQtde());
-                    
-                    System.out.println(estoque.getIngredientes().get(i).getNome()
-                                + " - " + estoque.getIngredientes().get(i).getQtdeTotal());
+                    int idIngrediente = b.getIngredientesBebidas().get(i).getIngrediente().getId();
+                    int iPosicaoIngrediente = interfaceRemota.getIngrediente(idIngrediente);
+                    int iQtdeIngrediente = b.getIngredientesBebidas().get(i).getQtde();
+
+                    interfaceRemota.reduzQtdeEstoqueIngrediente(iPosicaoIngrediente, qtde, iQtdeIngrediente);
+
                 }
 
-                System.out.println("Bartender Disponivel!");
                 System.out.println("Bartender " + this.getNome() + " - Preparando Bebida " + b.getNome());
                 this.entregaBebida(b, qtde);
             } else {
-                entregaBebida(null, 0);
                 System.out.println("Bartender " + this.getNome()
-                        + "Ingredientes Indisponiveis para o preparo do pedido!");
+                        + " - Ingredientes Indisponiveis para o preparo do pedido!");
+                entregaBebida(null, 0);
             }
         }
     }

@@ -4,6 +4,7 @@ import Cliente.Cliente;
 import Server.InterfaceRemota;
 import java.io.Serializable;
 import java.rmi.RemoteException;
+import java.util.Random;
 
 /**
  *
@@ -80,6 +81,7 @@ public class Garcom implements Serializable {
                         oBartender.preparaBebida(b, qtde);
                     } else {
                         System.out.println("Não possui bartenders disponíveis");
+                        System.out.println("Aguarde...");
                         Thread.sleep(1000);
                     }
                 }
@@ -114,5 +116,9 @@ public class Garcom implements Serializable {
 
         }
     }
-
+    
+    public int alteraClienteBebado(){
+        Random random = new Random();
+        return random.nextInt(5) - 2;
+    }
 }
