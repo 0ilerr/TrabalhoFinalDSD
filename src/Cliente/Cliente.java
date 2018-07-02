@@ -175,7 +175,7 @@ public class Cliente implements Runnable, Serializable {
                         + " reais por isso e agora está com R$"
                         + granaTotal
                         + " reais");
-                contadorBedado++;
+                contadorBedado = contadorBedado + quantidade;
             }
         }
         Thread.sleep(1000);
