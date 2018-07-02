@@ -30,7 +30,7 @@ public class Cliente implements Runnable, Serializable {
     private boolean bebado;
     private int contadorBedado;
 
-    public Cliente(int id, InterfaceRemota repositorio) throws RemoteException{
+    public Cliente(int id, InterfaceRemota repositorio) throws RemoteException {
         Random random = new Random();
         this.id = id;
         this.repositorio = repositorio;
@@ -77,11 +77,11 @@ public class Cliente implements Runnable, Serializable {
         }
         while (getGranaTotal() >= bebidaFavorita.getValor()) {
             Random random = new Random();
-            if(contadorBedado == 2){
+            if (contadorBedado == 2) {
                 bebado = true;
             }
             int qtde = random.nextInt(3) + 1;
-            if(contadorPedidosNegados == 10){
+            if (contadorPedidosNegados == 10) {
                 break;
             }
             if (persistente) {
@@ -97,7 +97,7 @@ public class Cliente implements Runnable, Serializable {
             }
 
         }
-        if(contadorPedidosNegados == 10){
+        if (contadorPedidosNegados == 10) {
             System.out.println("Este bar não tem nada que eu goste! Estou saindo!");
         } else {
             System.out.println("Cliente " + getNome() + " sem grana suficiente");
@@ -114,14 +114,14 @@ public class Cliente implements Runnable, Serializable {
                         System.out.println(getNome() + " - Quero Beber " + quantidade + " " + bebida.getNome());
                         oGarcom.setCliente(this);
                         oGarcom.setPedido(true);
-                        if(bebado){
+                        if (bebado) {
                             int prioridadeAtual = thread.getPriority();
                             int alteracaoDoGarcom = oGarcom.alteraClienteBebado();
                             int prioridadeAlterada = alteracaoDoGarcom + prioridadeAtual;
-                            if(prioridadeAlterada <= 0){
+                            if (prioridadeAlterada <= 0) {
                                 prioridadeAlterada = 1;
                             }
-                            if(prioridadeAlterada > 10){
+                            if (prioridadeAlterada > 10) {
                                 prioridadeAlterada = 10;
                             }
                             thread.setPriority(prioridadeAlterada);
@@ -141,15 +141,16 @@ public class Cliente implements Runnable, Serializable {
         }
     }
 
-    public void bebe(Bebida bebida, int quantidade) throws InterruptedException, RemoteException {
+    public void bebe(Bebida bebida, int quantidade)
+            throws InterruptedException, RemoteException {
 
         synchronized (this) {
             if (bebida == null) {
                 contadorPedidosNegados++;
                 System.out.println("Seu pedido foi negado!");
                 System.out.println("Esta é a " + contadorPedidosNegados + "ª vez que isto acontece");
-                if (contadorPedidosNegados%5 == 0) {
-                    if(thread.getPriority() < 8){
+                if (contadorPedidosNegados % 5 == 0) {
+                    if (thread.getPriority() < 8) {
                         thread.setPriority(thread.getPriority() + 2);
                     } else {
                         thread.setPriority(10);
@@ -163,9 +164,17 @@ public class Cliente implements Runnable, Serializable {
                     ex.printStackTrace();
                 }
             } else {
-                granaTotal -= bebidaFavorita.getValor();
-                System.out.println("Cliente " + getNome() + " pagou " + bebida.getValor() + " e está bebendo um(a) " 
-                        + bebida.getNome() + " e agora está com R$ " + granaTotal + " reais");
+                granaTotal -= (bebidaFavorita.getValor() * quantidade);
+                System.out.println("Cliente " + getNome()
+                        + " está bebendo "
+                        + quantidade
+                        + " "
+                        + bebida.getNome()
+                        + " pagou R$"
+                        + bebida.getValor() * quantidade
+                        + " reais por isso e agora está com R$"
+                        + granaTotal
+                        + " reais");
                 contadorBedado++;
             }
         }

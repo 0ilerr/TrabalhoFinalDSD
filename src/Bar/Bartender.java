@@ -73,6 +73,9 @@ public class Bartender implements Serializable {
 
                     interfaceRemota.reduzQtdeEstoqueIngrediente(iPosicaoIngrediente, qtde, iQtdeIngrediente);
 
+                    System.out.println(interfaceRemota.getEstoqueInstance().getIngredientes().get(i).getNome()
+                            + " - " + interfaceRemota.getQntdeTotalIngrediente(iPosicaoIngrediente));
+
                 }
 
                 System.out.println("Bartender " + this.getNome() + " - Preparando Bebida " + b.getNome());
