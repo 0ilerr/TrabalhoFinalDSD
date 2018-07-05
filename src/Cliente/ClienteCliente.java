@@ -1,6 +1,6 @@
 package Cliente;
 
-import Server.InterfaceRemota;
+import Bar.InterfaceRemota;
 import java.rmi.Naming;
 
 /**

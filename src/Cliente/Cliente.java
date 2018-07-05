@@ -7,7 +7,7 @@ package Cliente;
 
 import Bar.Bebida;
 import Bar.Garcom;
-import Server.InterfaceRemota;
+import Bar.InterfaceRemota;
 import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.Random;

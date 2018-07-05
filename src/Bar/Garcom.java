@@ -1,7 +1,6 @@
 package Bar;
 
 import Cliente.Cliente;
-import Server.InterfaceRemota;
 import java.io.Serializable;
 import java.rmi.RemoteException;
 import java.util.Random;

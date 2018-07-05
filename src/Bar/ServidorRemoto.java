@@ -1,4 +1,4 @@
-package Server;
+package Bar;
 
 import Bar.Bartender;
 import Bar.Garcom;

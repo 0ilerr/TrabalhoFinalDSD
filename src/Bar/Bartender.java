@@ -1,6 +1,5 @@
 package Bar;
 
-import Server.InterfaceRemota;
 import java.io.Serializable;
 import java.rmi.RemoteException;
 

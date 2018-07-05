@@ -16,9 +16,7 @@ public class Estoque implements Serializable {
 
     private static Estoque instance;
 
-    public static Object getEstoqueInstance() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    
     private ArrayList<Ingrediente> ingredientes;
 
     public static synchronized Estoque getInstance() {
